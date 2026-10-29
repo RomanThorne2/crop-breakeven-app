@@ -35,10 +35,16 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <div className="header-inner">
-          <h1>Crop Break-Even Calculator</h1>
-          <p className="header-sub">
-            North Central ND · NDSU 2026 Regional Projections
-          </p>
+          <div className="header-titles">
+            <h1>Crop Break-Even Calculator</h1>
+            <p className="header-sub">
+              North Central ND · NDSU 2026 Regional Projections
+            </p>
+          </div>
+          <div className="header-byline">
+            <div className="byline-rule" />
+            <span className="byline-name">Bryant Bohl</span>
+          </div>
         </div>
       </header>
 
