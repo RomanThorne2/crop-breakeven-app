@@ -1,11 +1,12 @@
-export function calcTotals(crop) {
-  const totalDirect   = Object.values(crop.directCosts).reduce((a, b) => a + b, 0);
-  const totalIndirect = Object.values(crop.indirectCosts).reduce((a, b) => a + b, 0);
+export function calcTotals(crop, landRent) {
+  const rent         = landRent ?? crop.baseLandRent;
+  const totalDirect  = Object.values(crop.directCosts).reduce((a, b) => a + b, 0);
+  const totalIndirect = Object.values(crop.indirectCosts).reduce((a, b) => a + b, 0) + rent;
   return { totalDirect, totalIndirect, totalCost: totalDirect + totalIndirect };
 }
 
-export function calcBreakEven(crop, adjYield, adjPrice) {
-  const { totalDirect, totalIndirect, totalCost } = calcTotals(crop);
+export function calcBreakEven(crop, adjYield, adjPrice, landRent) {
+  const { totalDirect, totalIndirect, totalCost } = calcTotals(crop, landRent);
   const revenue             = adjYield * adjPrice;
   const netReturn           = revenue - totalCost;
   const netReturnOverDirect = revenue - totalDirect;
@@ -25,12 +26,11 @@ export function calcBreakEven(crop, adjYield, adjPrice) {
   };
 }
 
-// Build chart data: net return/acre across a price range at a given yield
-export function buildChartData(crop, adjYield) {
-  const { totalCost } = calcTotals(crop);
-  const base  = crop.basePrice;
-  const lo    = Math.max(0.25, parseFloat((base - 2.5).toFixed(2)));
-  const hi    = parseFloat((base + 2.5).toFixed(2));
+// Build chart data: net return/acre across the full price slider range at a given yield
+export function buildChartData(crop, adjYield, landRent, priceMin, priceMax) {
+  const { totalCost } = calcTotals(crop, landRent);
+  const lo    = priceMin;
+  const hi    = priceMax;
   const steps = 60;
   const step  = (hi - lo) / steps;
 

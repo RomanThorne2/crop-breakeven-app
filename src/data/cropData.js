@@ -24,11 +24,11 @@ export const CROPS = {
       'Operating Interest':  7.37,
     },
     indirectCosts: {
-      'Misc. Overhead':          10.75,
-      'Machinery Depreciation':  29.69,
-      'Machinery Investment':    15.38,
-      'Land Charge (Cash Rent)': 57.00,
+      'Misc. Overhead':         10.75,
+      'Machinery Depreciation': 29.69,
+      'Machinery Investment':   15.38,
     },
+    baseLandRent: 57.00,
   },
 
   corn: {
@@ -52,11 +52,11 @@ export const CROPS = {
       'Operating Interest': 11.02,
     },
     indirectCosts: {
-      'Misc. Overhead':          13.95,
-      'Machinery Depreciation':  47.72,
-      'Machinery Investment':    23.28,
-      'Land Charge (Cash Rent)': 57.00,
+      'Misc. Overhead':         13.95,
+      'Machinery Depreciation': 47.72,
+      'Machinery Investment':   23.28,
     },
+    baseLandRent: 57.00,
   },
 
   soybean: {
@@ -80,10 +80,10 @@ export const CROPS = {
       'Operating Interest':  5.17,
     },
     indirectCosts: {
-      'Misc. Overhead':          9.64,
-      'Machinery Depreciation':  26.30,
-      'Machinery Investment':    12.78,
-      'Land Charge (Cash Rent)': 57.00,
+      'Misc. Overhead':         9.64,
+      'Machinery Depreciation': 26.30,
+      'Machinery Investment':   12.78,
     },
+    baseLandRent: 57.00,
   },
 };

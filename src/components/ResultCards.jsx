@@ -2,22 +2,30 @@ function fmt$(n)   { return n < 0 ? `($${Math.abs(n).toFixed(2)})` : `$${n.toFix
 function fmtBu(n)  { return `${n.toFixed(1)} bu/ac`; }
 
 export default function ResultCards({ results, adjYield, adjPrice, crop }) {
-  const { netReturn, breakEvenPrice, breakEvenYield, revenue, totalCost,
-          totalDirect, totalIndirect, isProfitable } = results;
+  const { netReturn, netReturnOverDirect, breakEvenPrice, breakEvenYield,
+          revenue, totalCost, totalDirect, totalIndirect, isProfitable } = results;
 
-  const bePrice_delta = adjPrice  - breakEvenPrice;   // positive = price above break-even
-  const beYield_delta = adjYield  - breakEvenYield;   // positive = yield above break-even
+  const bePrice_delta = adjPrice - breakEvenPrice;
 
   return (
     <div className="result-cards">
-      {/* Net Return — hero card */}
+      {/* Return to Labor & Management — hero card */}
       <div className={`card card-hero ${isProfitable ? 'positive' : 'negative'}`}>
-        <div className="card-label">Net Return / Acre</div>
+        <div className="card-label-row">
+          <span className="card-label">Return to Labor &amp; Management / Acre</span>
+          <span className="card-info" title="NDSU charges full opportunity cost for land and machinery, whether owned or rented.">ℹ</span>
+        </div>
         <div className="card-main">{fmt$(netReturn)}</div>
         <div className="card-sub">
           {isProfitable
             ? `$${Math.abs(bePrice_delta).toFixed(2)}/bu above break-even price`
             : `$${Math.abs(bePrice_delta).toFixed(2)}/bu below break-even price`}
+        </div>
+        <div className="card-secondary-metric">
+          <span className="card-secondary-label">Return over Direct Costs</span>
+          <span className={`card-secondary-val ${netReturnOverDirect >= 0 ? 'positive-val' : 'negative-val'}`}>
+            {fmt$(netReturnOverDirect)}
+          </span>
         </div>
       </div>
 

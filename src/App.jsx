@@ -12,6 +12,7 @@ export default function App() {
   const [cropKey,   setCropKey]   = useState('wheat');
   const [adjYield,  setAdjYield]  = useState(CROPS.wheat.baseYield);
   const [adjPrice,  setAdjPrice]  = useState(CROPS.wheat.basePrice);
+  const [landRent,  setLandRent]  = useState(CROPS.wheat.baseLandRent);
 
   const crop = CROPS[cropKey];
 
@@ -19,11 +20,12 @@ export default function App() {
     setCropKey(key);
     setAdjYield(CROPS[key].baseYield);
     setAdjPrice(CROPS[key].basePrice);
+    setLandRent(CROPS[key].baseLandRent);
   }, []);
 
   const results = useMemo(
-    () => calcBreakEven(crop, adjYield, adjPrice),
-    [crop, adjYield, adjPrice],
+    () => calcBreakEven(crop, adjYield, adjPrice, landRent),
+    [crop, adjYield, adjPrice, landRent],
   );
 
   const yieldMin = Math.floor(crop.baseYield * 0.4);
@@ -73,6 +75,16 @@ export default function App() {
               step={0.05}
               onChange={setAdjPrice}
             />
+            <SliderControl
+              label="Land Rent"
+              unit="$/acre"
+              value={landRent}
+              base={crop.baseLandRent}
+              min={0}
+              max={150}
+              step={1}
+              onChange={setLandRent}
+            />
           </div>
 
           <ResultCards
@@ -87,6 +99,9 @@ export default function App() {
           crop={crop}
           adjYield={adjYield}
           adjPrice={adjPrice}
+          landRent={landRent}
+          priceMin={priceMin}
+          priceMax={priceMax}
           results={results}
         />
 
@@ -94,6 +109,7 @@ export default function App() {
           crop={crop}
           adjYield={adjYield}
           adjPrice={adjPrice}
+          landRent={landRent}
         />
       </main>
 
@@ -107,7 +123,15 @@ export default function App() {
           >
             NDSU Extension EC1654, February 2026
           </a>
-          {' · '}Built with React + Vite
+          {' · '}
+          <a
+            href="https://github.com/RomanThorne2/crop-breakeven-app"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
+          {' · '}Built by Bryant Bohl
           {' · '}These are regional projections — not any specific farm&apos;s numbers.
         </p>
       </footer>

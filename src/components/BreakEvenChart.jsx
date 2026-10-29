@@ -18,11 +18,10 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-export default function BreakEvenChart({ crop, adjYield, adjPrice, results }) {
-  const data         = buildChartData(crop, adjYield);
-  const { breakEvenPrice, totalCost } = results;
+export default function BreakEvenChart({ crop, adjYield, adjPrice, landRent, priceMin, priceMax, results }) {
+  const data = buildChartData(crop, adjYield, landRent, priceMin, priceMax);
+  const { breakEvenPrice } = results;
 
-  // Dynamic Y domain — pad 20%
   const allVals = data.flatMap(d => [d.adjusted, d.baseline]);
   const yMin    = Math.floor(Math.min(...allVals) / 50) * 50 - 50;
   const yMax    = Math.ceil(Math.max(...allVals)  / 50) * 50 + 50;
@@ -40,13 +39,15 @@ export default function BreakEvenChart({ crop, adjYield, adjPrice, results }) {
       </div>
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={data} margin={{ top: 10, right: 20, left: 10, bottom: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#E8E5DC" />
           <XAxis
             dataKey="price"
             tickFormatter={v => `$${parseFloat(v).toFixed(2)}`}
             tick={{ fontSize: 11 }}
             label={{ value: 'Price ($/bu)', position: 'insideBottom', offset: -4, fontSize: 12 }}
             height={40}
+            domain={[priceMin, priceMax]}
+            type="number"
           />
           <YAxis
             tickFormatter={v => v >= 0 ? `$${v}` : `($${Math.abs(v)})`}
@@ -57,19 +58,16 @@ export default function BreakEvenChart({ crop, adjYield, adjPrice, results }) {
           <Tooltip content={<CustomTooltip />} />
           <Legend verticalAlign="top" height={28} wrapperStyle={{ fontSize: 12 }} />
 
-          {/* $0 break-even line */}
-          <ReferenceLine y={0} stroke="#374151" strokeWidth={2} strokeDasharray="0" />
+          <ReferenceLine y={0} stroke="#374139" strokeWidth={2} />
 
-          {/* Break-even price marker */}
           <ReferenceLine
             x={parseFloat(breakEvenPrice.toFixed(3))}
-            stroke="#F59E0B"
+            stroke="#D97706"
             strokeDasharray="5 3"
             strokeWidth={1.5}
             label={{ value: `BE $${breakEvenPrice.toFixed(2)}`, position: 'top', fontSize: 10, fill: '#B45309' }}
           />
 
-          {/* Current price marker */}
           <ReferenceLine
             x={parseFloat(adjPrice.toFixed(3))}
             stroke="#6366F1"
@@ -78,7 +76,6 @@ export default function BreakEvenChart({ crop, adjYield, adjPrice, results }) {
             label={{ value: `Now $${adjPrice.toFixed(2)}`, position: 'insideTopLeft', fontSize: 10, fill: '#4F46E5' }}
           />
 
-          {/* Adjusted yield line */}
           <Line
             type="monotone"
             dataKey="adjusted"
@@ -89,7 +86,6 @@ export default function BreakEvenChart({ crop, adjYield, adjPrice, results }) {
             activeDot={{ r: 4 }}
           />
 
-          {/* Base yield line (only shown when user has changed yield) */}
           {!adjYieldIsBase && (
             <Line
               type="monotone"
